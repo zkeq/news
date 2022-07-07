@@ -2,11 +2,13 @@ let index = 0;
 get_day_news(0);
 
 function handleError () { 
+    NProgress.done();
     Notiflix.failure.warning('An error occurred \uD83D\uDE1E');
   }
 
 
 function days_load () { 
+    NProgress.done();
     const days = JSON.parse(this.responseText);
     console.log(days);
     data = days['data'];
@@ -33,6 +35,7 @@ function bing_load () {
 }
 
 function get_day_news(index){
+      NProgress.start();
       const xhr = new XMLHttpRequest();
       xhr.open('GET', `https://bpi.icodeq.com/163news?index=${index}`);
       xhr.onload = days_load;
@@ -58,4 +61,11 @@ function before (){
         get_day_news(index);
         bing_load();
     }
+}document.onkeydown = chang_page;
+function chang_page() {
+    if (event.keyCode == 37 || event.keyCode == 33) {
+        before();
+    } else if (event.keyCode == 39 || event.keyCode == 34) {
+        after();
+    };
 }

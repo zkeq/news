@@ -10,7 +10,6 @@
     <script defer src="https://static.onmicrosoft.cn/zkeq/notiflix-notify-aio-3.2.5.min.js"></script>
     <link rel="stylesheet" href="https://static.onmicrosoft.cn/zkeq/notiflix-3.2.5.min.css">
     <link rel="stylesheet" href="/news.css">
-    <script src="./index.js"></script>
     <title>每日早报</title>
   </head>
 
@@ -48,10 +47,10 @@
             <thead>
               <tr>
                 <th>
-                  <center><button class="button" onclick="after()">后一天</button></center>
+                  <center><button class="button" onclick="before()">前一天</button></center>
                 </th>
                 <th>
-                  <center><button class="button" onclick="before()">前一天</button></center>
+                  <center><button class="button" onclick="after()">后一天</button></center>
                 </th>
               </tr>
             </thead>
@@ -61,5 +60,7 @@
       </div>
     </div>
   </body>
-
+  <script src="https://npm.elemecdn.com/nprogress@0.2.0/nprogress.js"></script>
+  <link href="https://icodeq.com/css/nprogress.css" rel="stylesheet">
+  <script src="./index.js"></script>
   </html>
