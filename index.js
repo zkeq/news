@@ -21,15 +21,17 @@ function first_xhr () {
 
 function str_to_date(str) {
     const date_str = str.split(' ')[0];
-    const year = date_str.split('年')[0];
-    const month = date_str.split('年')[1].split('月')[0];
-    const day = date_str.split('月')[1].split('日')[0];
-    if (year.length !== 0){
-        const cache = `${year}-${month}-${day}`;  
-        return cache;      
-    }else{
-        const cache = `${month}-${day}`;     
+    try{
+        const year = date_str.split('年')[0];
+        const month = date_str.split('年')[1].split('月')[0];
+        const day = date_str.split('月')[1].split('日')[0];
+        const cache = `${year}-${month}-${day}`; 
         return cache; 
+    }catch(error){
+        const month = date_str.split('月')[0];
+        const day = date_str.split('月')[1].split('日')[0];
+        const cache = `${month}-${day}`;  
+        return cache;     
     }
 }
 
@@ -49,6 +51,15 @@ function weiyu_load () {
     document.getElementById('weiyu').innerHTML = weiyu['hitokoto'];
 }
 
+function get_now_str () {
+    if (origin === 'zhihu') {
+        return '知乎';
+    }
+    if (origin === '163') {
+        return '网易新闻';
+    }
+}
+
 
 function days_load () { 
     NProgress.done();
@@ -63,10 +74,12 @@ function days_load () {
     // 显示通知
     try {
         const date_now = str_to_date(data['date']);
-        Notiflix.Notify.success(`${date_now} 更新成功`, {
+        const now_str = get_now_str();
+        Notiflix.Notify.success(`${now_str}源: ${date_now} 更新成功`, {
             showOnlyTheLastOne: true,    });
     } catch (error) {
-        Notiflix.Notify.success(`更新成功`, {
+        const now_str = get_now_str();
+        Notiflix.Notify.success(`${now_str}源: 更新成功`, {
             showOnlyTheLastOne: true,    });   
     }
     // 加载weiyu
