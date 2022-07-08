@@ -10,6 +10,16 @@ function handleError () {
     Notiflix.Notify.warning('An error occurred \uD83D\uDE1E');
 }
 
+function handleError_zhihu () { 
+    NProgress.done();
+    Notiflix.Notify.warning('知乎源：An error occurred \uD83D\uDE1E');
+}
+
+function handleError_163 () { 
+    NProgress.done();
+    Notiflix.Notify.warning('网易新闻源：An error occurred \uD83D\uDE1E');
+}
+
 function get_bing_into_local_storage () {
     const xhr = new XMLHttpRequest();
     xhr.open('GET', 'https://jsd.onmicrosoft.cn/gh/zkeq/Bing-Wallpaper-Action/data/zh-CN_all.json');
@@ -31,12 +41,12 @@ function first_xhr () {
     const xhr_zhihu = new XMLHttpRequest();
     xhr_zhihu.open('GET', 'https://bpi.icodeq.com/163news?_vercel_no_cache=1');
     xhr_zhihu.onload = zhihu_first_load;
-    xhr_zhihu.onerror = handleError;
+    xhr_zhihu.onerror = handleError_zhihu;
     xhr_zhihu.send();
     const xhr_163 = new XMLHttpRequest();
     xhr_163.open('GET', 'https://bpi.icodeq.com/163news?origin=163&_vercel_no_cache=1');
     xhr_163.onload = _163_init_load;
-    xhr_163.onerror = handleError;
+    xhr_163.onerror = handleError_163;
     xhr_163.send();
 }
 
