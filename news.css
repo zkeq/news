@@ -1127,7 +1127,7 @@ uni-preference-panel,
   #write h4,
   #write h5,
   #write h6 {
-    margin: 1.5rem 0;
+    margin: 1rem 0;
   }
 
   #write h1:before,
@@ -1416,7 +1416,7 @@ line,
   --focus-shadow: var(--opt-shadow);
 
   /* margin setting:top;right;bottom;left */
-  --margin-h1: 2rem auto 3rem;
+  --margin-h1: 2rem auto 1rem;
   --margin-h2: 2rem auto 1rem;
   --margin-h3: 2rem auto 1rem;
   --margin-h4: 2rem auto 1rem;
@@ -1544,7 +1544,7 @@ content {
   background: var(--bg-title-h1);
   color: var(--color-title-h1);
   font: var(--font-title-h1);
-  margin: var(--margin-h1);
+  /* margin: var(--margin-h1); */
 }
 
 #write h2 {
@@ -2156,7 +2156,7 @@ sup.md-footnote {
   --block-shadow-weak: none;
   --block-shadow-strong: none;
   /* margin setting:top;right;bottom;left */
-  --margin-h1: 2rem auto 3rem;
+  --margin-h1: 2rem auto 1rem;
   --margin-h2: 2rem auto 1rem;
   --margin-h3: 1.5rem auto 1rem;
   --margin-h4: 1.5rem auto 1rem;
