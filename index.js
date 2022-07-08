@@ -151,6 +151,15 @@ function change_page() {
     } else if (event.keyCode == 39 || event.keyCode == 34) {
         after();
     };
+    // 回车键
+    if (event.keyCode == 13) {
+        if (origin === 'zhihu') {
+            origin = '163';
+        } else{
+            origin = 'zhihu';
+        }
+        get_day_news(index, origin);
+    }
 }
 
 function change_origin  (){
