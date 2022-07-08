@@ -8,7 +8,23 @@ setTimeout(() => {
 function handleError () { 
     NProgress.done();
     Notiflix.Notify.warning('An error occurred \uD83D\uDE1E');
-  }
+}
+
+function get_bing_into_local_storage () {
+    const xhr = new XMLHttpRequest();
+    xhr.open('GET', 'https://jsd.onmicrosoft.cn/gh/zkeq/Bing-Wallpaper-Action/data/zh-CN_all.json');
+    xhr.onload = function () {
+        if (xhr.status === 200) {
+            const data = JSON.parse(xhr.responseText);
+            localStorage.setItem('bing', JSON.stringify(data));
+            bing_load();
+        } else {
+            handleError();
+        }
+    }
+    xhr.onerror = handleError;
+    xhr.send();
+}
 
 
 function first_xhr () {
@@ -107,11 +123,49 @@ function days_load () {
     // window.scrollTo(0, 0);
 }
 
+function bing_click (){
+    // 打开新窗口
+    window.open(document.getElementById('bing').src);
+}
+
+cache_admin();
+function cache_admin() {
+    // 查看 LocalStorage 是否有日期
+    if (localStorage.getItem('bing_cache')) {
+        const cache = localStorage.getItem('bing_cache');
+        // 获取当前时间
+        const date = new Date();
+        if (date - cache > 60*60*24*30*1000) {
+            // 超过一个月就重新获取
+            get_bing_into_local_storage();
+            // 获取当前时间
+            const date_now = Date.now();
+            // 更新 LocalStorage
+            localStorage.setItem('bing_cache', date_now);
+        }else{
+            // 否则直接加载
+            bing_load();
+        }
+        
+    }else{
+        get_bing_into_local_storage();
+        // 获取当前时间
+        const date_now = Date.now();
+        // 更新 LocalStorage
+        localStorage.setItem('bing_cache', date_now);
+    }
+}
+
+
 function bing_load () {
-    // 生成一段随机字符串大小写
-    const random = Math.random().toString(36).slice(-8);
-    const url = "https://bing.icodeq.com/?" + random;
-    document.getElementById('bing').src = url;
+    // 从 localStorage 中获取 bing
+    const bing_data = JSON.parse(localStorage.getItem('bing'));
+    // 取随机图片
+    const random_num = Math.floor(Math.random() * bing_data['data'].length);
+    const bing_url = "https://cn.bing.com" + bing_data["data"][random_num]["url"];
+    // 加载图片
+    document.getElementById('bing').src = bing_url;
+
 }
 
 function get_day_news(index, origin){
