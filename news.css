@@ -15,6 +15,14 @@ body.typora-export { padding-left: 30px; padding-right: 30px; }
 .typora-export .footnote-line, .typora-export li, .typora-export p { white-space: pre-wrap; }
 .typora-export .task-list-item input { pointer-events: none; }
 @media screen and (max-width: 500px) {
+  body {
+    margin: 0rem auto !important;
+  }
+  #write {
+    margin: 0rem auto !important;
+  }
+
+
   body.typora-export { padding-left: 0px; padding-right: 0px; }
   #write { padding-left: 20px; padding-right: 20px; }
   .CodeMirror-sizer { margin-left: 0px !important; }
@@ -1096,7 +1104,7 @@ uni-preference-panel,
   
 @media screen and (max-width: 600px) {
   #write {
-    padding: 2rem;
+    /* padding: 2rem; */
     line-height: 1.5rem;
   }
 
@@ -1218,7 +1226,10 @@ uni-preference-panel,
 
 @media screen and (max-width: 1000px) {
   #write {
-    margin: 0;
+    margin: 0rem auto !important;
+  }
+  body {
+    margin: 0rem auto !important;
   }
 
   footer.ty-footer {
