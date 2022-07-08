@@ -217,7 +217,6 @@ function change_page() {
 }
 
 function change_origin  (){
-    console.log("change_origin");
     if (origin === 'zhihu'){
         origin = '163';
         setTimeout(() => {
@@ -230,6 +229,5 @@ function change_origin  (){
             Notiflix.Notify.success('成功切换源为知乎');
         }, 1000);
     }
-    console.log(origin);
     get_day_news(index, origin);
 }
