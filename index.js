@@ -45,7 +45,6 @@ function weiyu_load () {
 function days_load () { 
     NProgress.done();
     const days = JSON.parse(this.responseText);
-    console.log(days);
     data = days['data'];
     // 加载标题
     if (data['date'].includes('年')){
@@ -60,8 +59,7 @@ function days_load () {
             showOnlyTheLastOne: true,    });
     } catch (error) {
         Notiflix.Notify.success(`更新成功`, {
-            showOnlyTheLastOne: true,    });    
-        console.log(error);
+            showOnlyTheLastOne: true,    });   
     }
     // 加载weiyu
     if (data['weiyu'].includes('【微语】')){
