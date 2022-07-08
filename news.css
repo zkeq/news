@@ -2217,7 +2217,7 @@ body {
   background: var(--bg-write);
   -webkit-font-smoothing: antialiased;
   margin: 2rem auto;
-  padding: 2rem;
+  /* padding: 2rem; */
 }
 
 h1 *,
