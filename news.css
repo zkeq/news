@@ -1500,7 +1500,7 @@ content {
 #write {
   background: var(--bg-write);
   max-width: 914px;
-  min-width: 400px;
+  /* min-width: 400px; */
   -webkit-font-smoothing: antialiased;
   min-height: calc(100vh - 6em);
   margin: 2rem auto;
@@ -2876,11 +2876,10 @@ table tr:hover {
   width: 100%;
   font-weight: 500;
   letter-spacing: 0;
-  line-height: 1em;
+  line-height: 3em;
   margin: 0;
   opacity: 1;
   outline: 0;
-  padding: 1.2em 2.2em;
   position: relative;
   text-align: center;
   text-decoration: none;

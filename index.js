@@ -1,4 +1,5 @@
 let index = 0;
+let origin = 'zhihu';
 get_day_news(0);
 setTimeout(() => {
     first_xhr();
@@ -23,8 +24,13 @@ function str_to_date(str) {
     const year = date_str.split('年')[0];
     const month = date_str.split('年')[1].split('月')[0];
     const day = date_str.split('月')[1].split('日')[0];
-    const cache = `${year}-${month}-${day}`;
-    return cache;
+    if (year.length !== 0){
+        const cache = `${year}-${month}-${day}`;  
+        return cache;      
+    }else{
+        const cache = `${month}-${day}`;     
+        return cache; 
+    }
 }
 
 
@@ -49,7 +55,7 @@ function days_load () {
     const days = JSON.parse(this.responseText);
     data = days['data'];
     // 加载标题
-    if (data['date'].includes('年')){
+    if (data['date'].includes('月')){
         document.getElementById('date').innerHTML = data['date'];
     } else {
         document.getElementById('date').innerHTML = '暂无数据';
@@ -95,11 +101,11 @@ function bing_load () {
     document.getElementById('bing').src = url;
 }
 
-function get_day_news(index){
+function get_day_news(index, origin){
       NProgress.start();
       const xhr = new XMLHttpRequest();
       const cache = localStorage.getItem('cache');
-      xhr.open('GET', `https://bpi.icodeq.com/163news?index=${index}&cache=${cache}`);
+      xhr.open('GET', `https://bpi.icodeq.com/163news?index=${index}&cache=${cache}&origin=${origin}`);
       xhr.onload = days_load;
       xhr.onerror = handleError;
       xhr.send();
@@ -110,7 +116,7 @@ function after (){
         Notiflix.Notify.success('当前已经是最新的了');
     }else{
         index -= 1;
-        get_day_news(index);
+        get_day_news(index, origin);
         bing_load();
     }
 }
@@ -120,14 +126,34 @@ function before (){
         Notiflix.Notify.warning('之后没有了');
     }else{
         index += 1;
-        get_day_news(index);
+        get_day_news(index, origin);
         bing_load();
     }
-}document.onkeydown = chang_page;
-function chang_page() {
+}
+
+document.onkeydown = change_page;
+function change_page() {
     if (event.keyCode == 37 || event.keyCode == 33) {
         before();
     } else if (event.keyCode == 39 || event.keyCode == 34) {
         after();
     };
+}
+
+function change_origin  (){
+    console.log("change_origin");
+    if (origin === 'zhihu'){
+        origin = '163';
+        setTimeout(() => {
+            Notiflix.Notify.success('成功切换源为网易新闻');
+        }, 1000);
+    }
+    else{
+        origin = 'zhihu';
+        setTimeout(() => {
+            Notiflix.Notify.success('成功切换源为知乎');
+        }, 1000);
+    }
+    console.log(origin);
+    get_day_news(index, origin);
 }
