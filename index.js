@@ -17,7 +17,7 @@ function get_bing_into_local_storage () {
         if (xhr.status === 200) {
             const data = JSON.parse(xhr.responseText);
             localStorage.setItem('bing', JSON.stringify(data));
-            bing_load();
+            bing_load(index);
         } else {
             handleError();
         }
@@ -135,7 +135,7 @@ function cache_admin() {
         const cache = localStorage.getItem('bing_cache');
         // 获取当前时间
         const date = new Date();
-        if (date - cache > 60*60*24*30*1000) {
+        if (date - cache > 60*60*24*1000) {
             // 超过一个月就重新获取
             get_bing_into_local_storage();
             // 获取当前时间
@@ -144,7 +144,7 @@ function cache_admin() {
             localStorage.setItem('bing_cache', date_now);
         }else{
             // 否则直接加载
-            bing_load();
+            bing_load(index);
         }
         
     }else{
@@ -157,12 +157,19 @@ function cache_admin() {
 }
 
 
-function bing_load () {
+function bing_load (index) {
     // 从 localStorage 中获取 bing
     const bing_data = JSON.parse(localStorage.getItem('bing'));
-    // 取随机图片
-    const random_num = Math.floor(Math.random() * bing_data['data'].length);
-    const bing_url = "https://cn.bing.com" + bing_data["data"][random_num]["url"];
+    // 如果 index 比 bing_data['data'].length 大
+    if (index >= bing_data['data'].length) {
+        const times = Math.floor(index / bing_data['data'].length);
+        // 减去 index 的值
+        index_num = index - (bing_data['data'].length * times);
+    }else{
+        index_num = index;
+    }
+    // 加载 bing
+    const bing_url = "https://cn.bing.com" + bing_data["data"][index_num]["url"];
     // 加载图片
     document.getElementById('bing').src = bing_url;
 
@@ -184,7 +191,7 @@ function after (){
     }else{
         index -= 1;
         get_day_news(index, origin);
-        bing_load();
+        bing_load(index);
     }
 }
 
@@ -194,7 +201,7 @@ function before (){
     }else{
         index += 1;
         get_day_news(index, origin);
-        bing_load();
+        bing_load(index);
     }
 }
 
