@@ -28,11 +28,16 @@ function get_bing_into_local_storage () {
 
 
 function first_xhr () {
-    const xhr = new XMLHttpRequest();
-    xhr.open('GET', 'https://bpi.icodeq.com/163news?_vercel_no_cache=1');
-    xhr.onload = first_load;
-    xhr.onerror = handleError;
-    xhr.send();
+    const xhr_zhihu = new XMLHttpRequest();
+    xhr_zhihu.open('GET', 'https://bpi.icodeq.com/163news?_vercel_no_cache=1');
+    xhr_zhihu.onload = zhihu_first_load;
+    xhr_zhihu.onerror = handleError;
+    xhr_zhihu.send();
+    const xhr_163 = new XMLHttpRequest();
+    xhr_163.open('GET', 'https://bpi.icodeq.com/163news?origin=163&_vercel_no_cache=1');
+    xhr_163.onload = _163_init_load;
+    xhr_163.onerror = handleError;
+    xhr_163.send();
 }
 
 function str_to_date(str) {
@@ -52,13 +57,21 @@ function str_to_date(str) {
 }
 
 
-function first_load () {
+function zhihu_first_load () {
     days_load.call(this);
-    Notiflix.Notify.success('当前数据为最新数据');
+    Notiflix.Notify.success('当前知乎数据源为最新数据');
     const days = JSON.parse(this.responseText);
     const cache = str_to_date(days['data']['date']);
-    localStorage.setItem('cache', cache);
+    localStorage.setItem('zhihu_cache', cache);
 }
+
+function _163_init_load () {
+    Notiflix.Notify.success('当前网易新闻数据源为最新数据');
+    const days = JSON.parse(this.responseText);
+    const cache = str_to_date(days['data']['date']);
+    localStorage.setItem('163_cache', cache);
+}
+
 
 
 function weiyu_load () {
@@ -178,7 +191,11 @@ function bing_load (index) {
 function get_day_news(index, origin){
       NProgress.start();
       const xhr = new XMLHttpRequest();
-      const cache = localStorage.getItem('cache');
+      if (origin === 'zhihu') {
+        cache =  localStorage.getItem('zhihu_cache');
+      }else{
+        cache =  localStorage.getItem('163_cache');
+      }
       xhr.open('GET', `https://bpi.icodeq.com/163news?index=${index}&cache=${cache}&origin=${origin}`);
       xhr.onload = days_load;
       xhr.onerror = handleError;
