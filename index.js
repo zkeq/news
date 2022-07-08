@@ -1,6 +1,6 @@
 let index = 0;
 let origin = 'zhihu';
-get_day_news(0);
+get_day_news(0, origin);
 setTimeout(() => {
     first_xhr();
 }, 1000);
