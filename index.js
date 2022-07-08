@@ -1,5 +1,8 @@
 let index = 0;
-first_xhr();
+get_day_news(0);
+setTimeout(() => {
+    first_xhr();
+}, 1000);
 
 function handleError () { 
     NProgress.done();
@@ -8,7 +11,6 @@ function handleError () {
 
 
 function first_xhr () {
-    NProgress.start();
     const xhr = new XMLHttpRequest();
     xhr.open('GET', 'https://bpi.icodeq.com/163news?_vercel_no_cache=1');
     xhr.onload = first_load;
@@ -28,7 +30,7 @@ function str_to_date(str) {
 
 function first_load () {
     days_load.call(this);
-    NProgress.done();
+    Notiflix.Notify.success('当前数据为最新数据');
     const days = JSON.parse(this.responseText);
     const cache = str_to_date(days['data']['date']);
     localStorage.setItem('cache', cache);
