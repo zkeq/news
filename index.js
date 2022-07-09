@@ -40,12 +40,12 @@ function get_bing_into_local_storage () {
 function first_xhr () {
     const now_time = new Date().getHours() +"hrs" + new Date().getMinutes() + "min";
     const xhr_zhihu = new XMLHttpRequest();
-    xhr_zhihu.open('GET', 'https://bpi.icodeq.com/163news?_vercel_no_cache=1' + '&cache=' + now_time);
+    xhr_zhihu.open('GET', '/api?_vercel_no_cache=1' + '&cache=' + now_time);
     xhr_zhihu.onload = zhihu_first_load;
     xhr_zhihu.onerror = handleError_zhihu;
     xhr_zhihu.send();
     const xhr_163 = new XMLHttpRequest();
-    xhr_163.open('GET', 'https://bpi.icodeq.com/163news?origin=163&_vercel_no_cache=1'+ '&cache=' + now_time);
+    xhr_163.open('GET', '/api?origin=163&_vercel_no_cache=1'+ '&cache=' + now_time);
     xhr_163.onload = _163_init_load;
     xhr_163.onerror = handleError_163;
     xhr_163.send();
@@ -207,7 +207,7 @@ function get_day_news(index, origin){
       }else{
         cache =  localStorage.getItem('163_cache');
       }
-      xhr.open('GET', `https://bpi.icodeq.com/163news?index=${index}&cache=${cache}&origin=${origin}`);
+      xhr.open('GET', `/api?index=${index}&cache=${cache}&origin=${origin}`);
       xhr.onload = days_load;
       xhr.onerror = handleError;
       xhr.send();
