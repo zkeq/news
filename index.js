@@ -38,13 +38,14 @@ function get_bing_into_local_storage () {
 
 
 function first_xhr () {
+    const now_time = new Date().getHours() +"hrs" + new Date().getMinutes() + "min";
     const xhr_zhihu = new XMLHttpRequest();
-    xhr_zhihu.open('GET', 'https://bpi.icodeq.com/163news?_vercel_no_cache=1');
+    xhr_zhihu.open('GET', 'https://bpi.icodeq.com/163news?_vercel_no_cache=1' + '&cache=' + now_time);
     xhr_zhihu.onload = zhihu_first_load;
     xhr_zhihu.onerror = handleError_zhihu;
     xhr_zhihu.send();
     const xhr_163 = new XMLHttpRequest();
-    xhr_163.open('GET', 'https://bpi.icodeq.com/163news?origin=163&_vercel_no_cache=1');
+    xhr_163.open('GET', 'https://bpi.icodeq.com/163news?origin=163&_vercel_no_cache=1'+ '&cache=' + now_time);
     xhr_163.onload = _163_init_load;
     xhr_163.onerror = handleError_163;
     xhr_163.send();
