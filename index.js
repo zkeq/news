@@ -159,7 +159,7 @@ function cache_admin() {
         const cache = localStorage.getItem('bing_cache');
         // 获取当前时间
         const date = new Date();
-        if (date - cache > 60*60*24*1000) {
+        if (date - cache > 60*60*6*1000) {
             // 超过一天就重新获取
             get_bing_into_local_storage();
             // 获取当前时间
