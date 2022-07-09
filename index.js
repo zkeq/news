@@ -149,7 +149,7 @@ function days_load () {
 
 function bing_click (){
     // 打开新窗口
-    window.open(document.getElementById('bing').src);
+    window.open(document.getElementById('bing').src.split('_1920x1080.jpg')[0] + '_UHD.jpg');
 }
 
 cache_admin();
