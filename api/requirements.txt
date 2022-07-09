@@ -1,0 +1,7 @@
+requests==2.25.1
+urllib3==1.26.5
+fastapi~=0.75.0
+uvicorn==0.17.6
+python-multipart==0.0.5
+beautifulsoup4==4.10.0
+lxml==4.9.1
