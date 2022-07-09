@@ -22,7 +22,7 @@ function handleError_163 () {
 
 function get_bing_into_local_storage () {
     const xhr = new XMLHttpRequest();
-    xhr.open('GET', 'https://jsd.onmicrosoft.cn/gh/zkeq/Bing-Wallpaper-Action/data/zh-CN_all.json');
+    xhr.open('GET', 'https://raw.onmicrosoft.cn/Bing-Wallpaper-Action/main/data/zh-CN_all.json');
     xhr.onload = function () {
         if (xhr.status === 200) {
             const data = JSON.parse(xhr.responseText);
@@ -160,7 +160,7 @@ function cache_admin() {
         // 获取当前时间
         const date = new Date();
         if (date - cache > 60*60*24*1000) {
-            // 超过一个月就重新获取
+            // 超过一天就重新获取
             get_bing_into_local_storage();
             // 获取当前时间
             const date_now = Date.now();
