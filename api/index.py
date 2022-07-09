@@ -5,7 +5,7 @@ from api.crawler import main as new
 
 app = FastAPI()
 
-@app.get("/163news")
+@app.get("/api")
 def news(response: Response, index: int = 0, origin: str = 'zhihu', cache: str = 'null'):
     response.headers["Cache-Control"] = "max-age=86400, immutable, stale-while-revalidate"
     response.headers["Content-Type"] = "application/json; charset=utf-8"
