@@ -21,14 +21,6 @@
 
 #### `replit` 部署
 
-##### 个人版
-
-<a href="https://repl.it/github/valetzx/newsonreplit">
-  <img alt="Run on Repl.it" src="https://repl.it/badge/github/valetzx/newsonreplit" style="height: 40px; width: 190px;" />
-</a>
-
-##### 教育版
-
 - 见分支 https://github.com/zkeq/news/tree/replit
 
 #### 服务器部署（不推荐）
