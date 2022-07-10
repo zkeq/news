@@ -2,6 +2,7 @@ let index = 0;
 let origin = 'zhihu';
 get_day_news(0, origin);
 setTimeout(() => {
+    Notiflix.Notify.warning('正在请求最新数据...');
     first_xhr();
 }, 1000);
 
