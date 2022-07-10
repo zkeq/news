@@ -16,4 +16,4 @@ def news(response: Response, index: int = 0, origin: str = 'zhihu', cache: str =
 
 
 if __name__ == "__main__":
-    uvicorn.run("fast:app", host="127.0.0.1", port=61, log_level="info")
+    uvicorn.run("index:app", host="127.0.0.1", port=61, log_level="info")

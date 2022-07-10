@@ -15,13 +15,33 @@
 - 官网地址：[https://news.icodeq.com](https://news.icodeq.com/)
 - 源码地址：https://github.com/zkeq/news
 
-#### vercel 一键部署
+#### `vercel` 一键部署
 
-- 
+[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2Fzkeq%2Fnews)
+
+#### `replit` 部署
+
+##### 个人版
+
+<a href="https://repl.it/github/valetzx/newsonreplit">
+  <img alt="Run on Repl.it" src="https://repl.it/badge/github/valetzx/newsonreplit" style="height: 40px; width: 190px;" />
+</a>
+
+##### 教育版
+
+- 见分支 https://github.com/zkeq/news/tree/replit
+
+#### 服务器部署（不推荐）
+
+1. 安装 `Python 3` 
+2. 安装 [依赖库](https://github.com/zkeq/news/blob/main/api/requirements.txt)
+3. 将 `api/index.py`  中的 `from api.crawler` 改为 `from crawler`
+4. 运行 ` python api/index.py`
+5. 将 `index.js`中的 api域名改为部署得到的域名即可
 
 #### API 说明
 
-GET：``/api`
+GET：`/api`
 
 ##### 请求参数
 
