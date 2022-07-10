@@ -15,11 +15,11 @@
 - 官网地址：[https://news.icodeq.com](https://news.icodeq.com/)
 - 源码地址：https://github.com/zkeq/news
 
-#### `vercel` 一键部署
+#### vercel 一键部署（推荐）
 
 [![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2Fzkeq%2Fnews)
 
-#### `replit` 部署
+#### replit 部署（不推荐）
 
 - 见分支 https://github.com/zkeq/news/tree/replit
 
