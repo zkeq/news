@@ -29,7 +29,7 @@
 2. 安装 [依赖库](https://github.com/zkeq/news/blob/main/api/requirements.txt)
 3. 将 `api/index.py`  中的 `from api.crawler` 改为 `from crawler`
 4. 运行 ` python api/index.py`
-5. 将 `index.js`中的 api域名改为部署得到的域名即可
+5. 将 `index.js`中的 api 域名改为部署得到的域名即可
 
 #### API 说明
 
