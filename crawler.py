@@ -6,7 +6,7 @@ import time
 
 def get_zhihu_days(index):
     headers = {
-        "user-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/103.0.5060.66 Safari/537.36 Edg/103.0.1264.44"
+        "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/103.0.5060.66 Safari/537.36 Edg/103.0.1264.44"
     }
     base_url = f"https://www.zhihu.com/api/v4/columns/c_1261258401923026944/items?limit=1&offset={index}"
     data = requests.get(base_url, headers=headers).json()
@@ -60,7 +60,7 @@ def main(index, origin):
             data, news_list = get_zhihu_days(index)
             suc = True
         except Exception as e:
-            data = e
+            data = [str(e)]*18
             suc = False
             news_list = []
     else:
@@ -68,7 +68,7 @@ def main(index, origin):
             data, news_list = get_163_days(index)
             suc = True
         except Exception as e:
-            data = e
+            data = [str(e)]*18
             suc = False
             news_list = []
     return {
