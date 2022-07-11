@@ -48,7 +48,7 @@ function first_xhr () {
     const now_time = new Date().getHours() +"hrs" + new Date().getMinutes() + "min";
     try{
         const xhr_zhihu = new XMLHttpRequest();
-        xhr_zhihu.open('GET', '/api?_vercel_no_cache=1' + '&cache=' + now_time);
+        xhr_zhihu.open('GET', '/api?origin=zhihu&_vercel_no_cache=1' + '&cache=' + now_time);
         xhr_zhihu.onload = zhihu_first_load;
         xhr_zhihu.onerror = handleError_zhihu;
         xhr_zhihu.send();
