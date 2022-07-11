@@ -60,7 +60,7 @@ def main(index, origin):
             data, news_list = get_zhihu_days(index)
             suc = True
         except Exception as e:
-            data = [e]*18
+            data = [str(e)]*18
             suc = False
             news_list = []
     else:
@@ -68,7 +68,7 @@ def main(index, origin):
             data, news_list = get_163_days(index)
             suc = True
         except Exception as e:
-            data = [e]*18
+            data = [str(e)]*18
             suc = False
             news_list = []
     return {
