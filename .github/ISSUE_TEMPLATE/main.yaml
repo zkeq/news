@@ -3,7 +3,7 @@ description: File a bug report
 title: "[接口失效]: "
 labels: ["bug", "api"]
 assignees:
-  - octocat
+  - zkeq
 body:
   - type: markdown
     attributes:
