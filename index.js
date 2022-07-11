@@ -43,17 +43,25 @@ function get_bing_into_local_storage () {
 
 
 function first_xhr () {
-    const now_time = new Date().getHours() +"hrs" + new Date().getMinutes() + "min";
-    const xhr_zhihu = new XMLHttpRequest();
-    xhr_zhihu.open('GET', '/api?_vercel_no_cache=1' + '&cache=' + now_time);
-    xhr_zhihu.onload = zhihu_first_load;
-    xhr_zhihu.onerror = handleError_zhihu;
-    xhr_zhihu.send();
-    const xhr_163 = new XMLHttpRequest();
-    xhr_163.open('GET', '/api?origin=163&_vercel_no_cache=1'+ '&cache=' + now_time);
-    xhr_163.onload = _163_init_load;
-    xhr_163.onerror = handleError_163;
-    xhr_163.send();
+    try{
+        const now_time = new Date().getHours() +"hrs" + new Date().getMinutes() + "min";
+        const xhr_zhihu = new XMLHttpRequest();
+        xhr_zhihu.open('GET', '/api?_vercel_no_cache=1' + '&cache=' + now_time);
+        xhr_zhihu.onload = zhihu_first_load;
+        xhr_zhihu.onerror = handleError_zhihu;
+        xhr_zhihu.send();
+    }catch(e){
+        handleError_zhihu(e);
+    }
+    try{
+        const xhr_163 = new XMLHttpRequest();
+        xhr_163.open('GET', '/api?origin=163&_vercel_no_cache=1'+ '&cache=' + now_time);
+        xhr_163.onload = _163_init_load;
+        xhr_163.onerror = handleError_163;
+        xhr_163.send();
+    }catch(e){
+        handleError_163(e);
+    }
 }
 
 function str_to_date(str) {
@@ -229,17 +237,21 @@ function bing_load (index) {
 }
 
 function get_day_news(index, origin){
-      NProgress.start();
-      const xhr = new XMLHttpRequest();
-      if (origin === 'zhihu') {
-        cache =  localStorage.getItem('zhihu_cache');
-      }else{
-        cache =  localStorage.getItem('163_cache');
-      }
-      xhr.open('GET', `/api?index=${index}&cache=${cache}&origin=${origin}`);
-      xhr.onload = days_load;
-      xhr.onerror = handleError;
-      xhr.send();
+      try{
+        NProgress.start();
+        const xhr = new XMLHttpRequest();
+        if (origin === 'zhihu') {
+            cache =  localStorage.getItem('zhihu_cache');
+        }else{
+            cache =  localStorage.getItem('163_cache');
+        }
+        xhr.open('GET', `/api?index=${index}&cache=${cache}&origin=${origin}`);
+        xhr.onload = days_load;
+        xhr.onerror = handleError;
+        xhr.send();
+      } catch(error){
+            handleError(error);
+        }
 }
 
 function after (){
