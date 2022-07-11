@@ -6,19 +6,23 @@ setTimeout(() => {
     first_xhr();
 }, 1000);
 
-function handleError () { 
-    NProgress.done();
-    Notiflix.Notify.warning('An error occurred \uD83D\uDE1E');
+function report_bug () {
+    window.open('https://github.com/zkeq/news/issues');
 }
 
-function handleError_zhihu () { 
+function handleError (e) { 
     NProgress.done();
-    Notiflix.Notify.warning('知乎源：An error occurred \uD83D\uDE1E');
+    Notiflix.Notify.failure(`An error occurred \uD83D\uDE1E ${e}`, ()=>report_bug());
 }
 
-function handleError_163 () { 
+function handleError_zhihu (e) { 
     NProgress.done();
-    Notiflix.Notify.warning('网易新闻源：An error occurred \uD83D\uDE1E');
+    Notiflix.Notify.failure(`知乎源：An error occurred \uD83D\uDE1E ${e}`, ()=>report_bug());
+}
+
+function handleError_163 (e) { 
+    NProgress.done();
+    Notiflix.Notify.failure(`网易新闻源：An error occurred \uD83D\uDE1E ${e}`, ()=>report_bug());
 }
 
 function get_bing_into_local_storage () {
@@ -30,7 +34,7 @@ function get_bing_into_local_storage () {
             localStorage.setItem('bing', JSON.stringify(data));
             bing_load(index);
         } else {
-            handleError();
+            handleError('Bing 获取失败');
         }
     }
     xhr.onerror = handleError;
@@ -70,18 +74,34 @@ function str_to_date(str) {
 
 
 function zhihu_first_load () {
-    days_load.call(this);
-    Notiflix.Notify.success('当前知乎数据源为最新数据');
-    const days = JSON.parse(this.responseText);
-    const cache = str_to_date(days['data']['date']);
-    localStorage.setItem('zhihu_cache', cache);
+    try{
+        const days = JSON.parse(this.responseText);
+    if (days['suc']) {
+        days_load.call(this);
+        Notiflix.Notify.success('当前知乎数据源为最新数据');
+        const cache = str_to_date(days['data']['date']);
+        localStorage.setItem('zhihu_cache', cache);
+    } else{
+        handleError_zhihu(days['all_data']);
+    }
+    }catch(error){
+        handleError_zhihu(error);
+    }
 }
 
 function _163_init_load () {
-    Notiflix.Notify.success('当前网易新闻数据源为最新数据');
+    try{
     const days = JSON.parse(this.responseText);
-    const cache = str_to_date(days['data']['date']);
-    localStorage.setItem('163_cache', cache);
+    if (days['suc']) {
+        Notiflix.Notify.success('当前网易新闻数据源为最新数据');
+        const cache = str_to_date(days['data']['date']);
+        localStorage.setItem('163_cache', cache);
+    } else{
+        handleError_163(days['all_data']);
+    }
+    }catch(error){
+        handleError_163(error);
+    }
 }
 
 
@@ -103,49 +123,57 @@ function get_now_str () {
 
 
 function days_load () { 
+    try{
     NProgress.done();
     const days = JSON.parse(this.responseText);
-    data = days['data'];
-    // 加载标题
-    if (data['date'].includes('月')){
-        document.getElementById('date').innerHTML = data['date'];
+    if (days['suc']) {   
+        data = days['data'];
+        // 加载标题
+        if (data['date'].includes('月')){
+            document.getElementById('date').innerHTML = data['date'];
+        } else {
+            document.getElementById('date').innerHTML = '暂无数据';
+        }
+        // 显示通知
+        try {
+            const date_now = str_to_date(data['date']);
+            const now_str = get_now_str();
+            Notiflix.Notify.success(`${now_str}源: ${date_now} 更新成功`, {
+                showOnlyTheLastOne: true,    });
+        } catch (error) {
+            const now_str = get_now_str();
+            Notiflix.Notify.success(`${now_str}源: 更新成功`, {
+                showOnlyTheLastOne: true,    });   
+        }
+        // 加载weiyu
+        if (data['weiyu'].includes('【微语】')){
+            document.getElementById('weiyu').innerHTML = data['weiyu'].replace("【微语】", '');
+        } else {
+            // 获取一言
+            const xhr = new XMLHttpRequest();
+            xhr.open('GET', 'https://v1.hitokoto.cn');
+            xhr.onload = weiyu_load;
+            xhr.onerror = handleError;
+            xhr.send();
+        }
+        
+        // 清空原有的新闻
+        document.getElementById('news').innerHTML = '';
+        for (let i = 0; i < data['news'].length; i++) {
+            // 将其变成 li 并插入ol
+            const li = document.createElement('li');
+            li.innerHTML = data['news'][i];
+            // 插入新的 li
+            document.getElementById('news').appendChild(li);
+        }
+        // // 滚动条滚到顶部
+        // window.scrollTo(0, 0);
     } else {
-        document.getElementById('date').innerHTML = '暂无数据';
+        handleError(days['all_data']);
+    }}
+    catch(error){
+        handleError(error);
     }
-    // 显示通知
-    try {
-        const date_now = str_to_date(data['date']);
-        const now_str = get_now_str();
-        Notiflix.Notify.success(`${now_str}源: ${date_now} 更新成功`, {
-            showOnlyTheLastOne: true,    });
-    } catch (error) {
-        const now_str = get_now_str();
-        Notiflix.Notify.success(`${now_str}源: 更新成功`, {
-            showOnlyTheLastOne: true,    });   
-    }
-    // 加载weiyu
-    if (data['weiyu'].includes('【微语】')){
-        document.getElementById('weiyu').innerHTML = data['weiyu'].replace("【微语】", '');
-    } else {
-        // 获取一言
-        const xhr = new XMLHttpRequest();
-        xhr.open('GET', 'https://v1.hitokoto.cn');
-        xhr.onload = weiyu_load;
-        xhr.onerror = handleError;
-        xhr.send();
-    }
-    
-    // 清空原有的新闻
-    document.getElementById('news').innerHTML = '';
-    for (let i = 0; i < data['news'].length; i++) {
-        // 将其变成 li 并插入ol
-        const li = document.createElement('li');
-        li.innerHTML = data['news'][i];
-        // 插入新的 li
-        document.getElementById('news').appendChild(li);
-    }
-    // // 滚动条滚到顶部
-    // window.scrollTo(0, 0);
 }
 
 function bing_click (){
