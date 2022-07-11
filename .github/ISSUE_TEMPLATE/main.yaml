@@ -1,0 +1,56 @@
+name: 接口失效报告
+description: File a bug report
+title: "[接口失效]: "
+labels: ["bug", "api"]
+assignees:
+  - octocat
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thank you for reporting the bug. 感谢您来报告BUG，请描述您遇到的问题，我们会尽快处理。
+  - type: dropdown
+    id: Platform
+    attributes:
+      label: Platform
+      description: What platform are you deploying on? 您部署的平台是？
+      multiple: false
+      options:
+        - vercel
+        - replit
+        - 服务器
+        - 其他
+  - type: textarea
+    id: what-happened
+    attributes:
+      label: What happened?
+      description: Also tell us, what did you expect to happen? 请告诉我们您遇到的问题，以及您期望的结果。
+      placeholder: Tell us what you see!  描述一下这个bug。
+      value: "A bug happened!"
+    validations:
+      required: true
+  - type: dropdown
+    id: origin
+    attributes:
+      label: Origin
+      description: Did the interface fail? Which interface failed? 是接口失效了吗？哪个接口失效了？
+      multiple: true
+      options:
+        - 知乎源
+        - 有道新闻源
+    validations:
+      required: false
+  - type: textarea
+    id: logs
+    attributes:
+      label: Relevant log output
+      description: Please copy and paste any relevant log output. 请将详细报错日志粘贴到此处，这将自动格式化为代码，因此无需背板。
+      render: shell
+  - type: checkboxes
+    id: terms
+    attributes:
+      label: Code of Conduct
+      description: 我想我报告的是该项目的一个 bug，而不是由于我的误操作导致的报错（这类问题请移至 Discussions 讨论）。
+      options:
+        - label: 哦，天哪，这确实是一个bug。
+          required: true
