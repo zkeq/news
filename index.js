@@ -92,7 +92,7 @@ function zhihu_first_load () {
         const cache = str_to_date(days['data']['date']);
         localStorage.setItem('zhihu_cache', cache);
     } else{
-        handleError_zhihu(days['title']);
+        handleError_zhihu(days['data']['title']);
     }
     }catch(error){
         handleError_zhihu(error);
@@ -107,7 +107,7 @@ function _163_init_load () {
         const cache = str_to_date(days['data']['date']);
         localStorage.setItem('163_cache', cache);
     } else{
-        handleError_163(days['title']);
+        handleError_163(days['data']['title']);
     }
     }catch(error){
         handleError_163(error);
@@ -179,7 +179,7 @@ function days_load (show_only) {
         // // 滚动条滚到顶部
         // window.scrollTo(0, 0);
     } else {
-        handleError(days['title']);
+        handleError(days['data']['title']);
     }}
     catch(error){
         handleError(error);
