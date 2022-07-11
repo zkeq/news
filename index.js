@@ -1,5 +1,6 @@
 let index = 0;
 let origin = 'zhihu';
+let show_only = true;
 get_day_news(0, origin);
 setTimeout(() => {
     Notiflix.Notify.warning('正在请求最新数据...');
@@ -85,7 +86,7 @@ function zhihu_first_load () {
     try{
         const days = JSON.parse(this.responseText);
     if (days['suc']) {
-        days_load.call(this);
+        days_load.call(this, show_only = false);
         Notiflix.Notify.success('当前知乎数据源为最新数据');
         const cache = str_to_date(days['data']['date']);
         localStorage.setItem('zhihu_cache', cache);
@@ -130,7 +131,7 @@ function get_now_str () {
 }
 
 
-function days_load () { 
+function days_load (show_only) { 
     try{
     NProgress.done();
     const days = JSON.parse(this.responseText);
@@ -147,11 +148,11 @@ function days_load () {
             const date_now = str_to_date(data['date']);
             const now_str = get_now_str();
             Notiflix.Notify.success(`${now_str}源: ${date_now} 更新成功`, {
-                showOnlyTheLastOne: true,    });
+                showOnlyTheLastOne: show_only,    });
         } catch (error) {
             const now_str = get_now_str();
             Notiflix.Notify.success(`${now_str}源: 更新成功`, {
-                showOnlyTheLastOne: true,    });   
+                showOnlyTheLastOne: show_only,    });   
         }
         // 加载weiyu
         if (data['weiyu'].includes('【微语】')){
