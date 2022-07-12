@@ -14,7 +14,7 @@ def news(response: Response, index: int = 0, origin: str = 'zhihu', cache: str =
     if origin == "undefined":
         origin = "zhihu"
     if news_str != 'null':
-        news_source(news_str)
+        return news_source(news_str)
     return new(index, origin)
 
 
