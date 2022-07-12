@@ -156,6 +156,7 @@ function curl_news_sourece(i, data){
             }
         }
     }
+    try{
     // 请求 /api/news?news_str=%E6%B2%B3%E5%8D%97%20%E5%AF%B9%20%E7%A6%B9%20%E5%B7%9E%20%E6%96%B0%20%E6%B0%91%E7%94%9F%20%E6%9D%91%E9%95%87%20%E9%93%B6%E8%A1%8C&_vercel_no_cache=1
     const xhr = new XMLHttpRequest();
     xhr.open('GET', '/api?news_str=' + news_source);
@@ -189,6 +190,11 @@ function curl_news_sourece(i, data){
         NProgress.set(i / document.getElementById('news').children.length + 0.3);
     };
     xhr.send();
+    }catch(error){
+        ul_data = [`<li><a href="https://quark.sm.cn/s?q=${news_source}" target="_blank">${news_source} <p class='right'>点击进入搜索页面</p></a> </li>`];
+        document.getElementById('news').children[i].innerHTML += `<ul class='hide'>${ul_data.join('')}</ul>`;
+        NProgress.set(i / document.getElementById('news').children.length + 0.3);
+}
 }
 
 function days_load (show_only) { 
