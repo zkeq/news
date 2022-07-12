@@ -186,7 +186,7 @@ function curl_news_sourece(i, data){
     xhr.onerror = function () {
         ul_data = [`<li><a href="https://quark.sm.cn/s?q=${news_source}" target="_blank">${news_source} <p class='right'>点击进入搜索页面</p></a> </li>`];
         document.getElementById('news').children[i].innerHTML += `<ul class='hide'>${ul_data.join('')}</ul>`;
-        NProgress.set(i / document.getElementById('news').children.length + 0.1);
+        NProgress.set(i / document.getElementById('news').children.length + 0.3);
     };
     xhr.send();
 }
