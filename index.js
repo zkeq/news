@@ -48,7 +48,7 @@ function first_xhr () {
     const now_time = new Date().getHours() +"hrs" + new Date().getMinutes() + "min";
     try{
         const xhr_zhihu = new XMLHttpRequest();
-        xhr_zhihu.open('GET', '/api?origin=zhihu&_vercel_no_cache=1' + '&cache=' + now_time);
+        xhr_zhihu.open('GET', 'https://news.icodeq.com/api?origin=zhihu&_vercel_no_cache=1' + '&cache=' + now_time);
         xhr_zhihu.onload = zhihu_first_load;
         xhr_zhihu.onerror = handleError_zhihu;
         xhr_zhihu.send();
@@ -57,7 +57,7 @@ function first_xhr () {
     }
     try{
         const xhr_163 = new XMLHttpRequest();
-        xhr_163.open('GET', '/api?origin=163&_vercel_no_cache=1'+ '&cache=' + now_time);
+        xhr_163.open('GET', 'https://news.icodeq.com/api?origin=163&_vercel_no_cache=1'+ '&cache=' + now_time);
         xhr_163.onload = _163_init_load;
         xhr_163.onerror = handleError_163;
         xhr_163.send();
@@ -144,9 +144,9 @@ function curl_news_sourece(i, data){
             news_source += "" + word['segment'];
         }
     }
-    // 请求 /api/news_source?news_str=%E6%B2%B3%E5%8D%97%20%E5%AF%B9%20%E7%A6%B9%20%E5%B7%9E%20%E6%96%B0%20%E6%B0%91%E7%94%9F%20%E6%9D%91%E9%95%87%20%E9%93%B6%E8%A1%8C&_vercel_no_cache=1
+    // 请求 https://bpi.icodeq.com/news_source?news_str=%E6%B2%B3%E5%8D%97%20%E5%AF%B9%20%E7%A6%B9%20%E5%B7%9E%20%E6%96%B0%20%E6%B0%91%E7%94%9F%20%E6%9D%91%E9%95%87%20%E9%93%B6%E8%A1%8C&_vercel_no_cache=1
     const xhr = new XMLHttpRequest();
-    xhr.open('GET', '/api/news_source?news_str=' + news_source);
+    xhr.open('GET', 'https://bpi.icodeq.com/news_source?news_str=' + news_source);
     xhr.onload = function () {
         // console.log(i)
         if (this.status === 200) {
@@ -158,7 +158,7 @@ function curl_news_sourece(i, data){
             }else{
                 // 将里面的 href 和 title 封装成一个 ul
                 ul_data = ul_data.map(function (item) {
-                    return `<li><a href="${item['href']}" target="_blank">${item['title']} <p class='right'>${item['origin']} ${item['time']}</p></a> </li>`;
+                    return `<li onclick="stop_open(event)"><a href="${item['href']}" target="_blank">${item['title']} <p class='right'>${item['origin']} ${item['time']}</p></a> </li>`;
                 });
 
             }
@@ -298,7 +298,7 @@ function get_day_news(index, origin){
         }else{
             cache =  localStorage.getItem('163_cache');
         }
-        xhr.open('GET', `/api?index=${index}&cache=${cache}&origin=${origin}`);
+        xhr.open('GET', `https://news.icodeq.com/api?index=${index}&cache=${cache}&origin=${origin}`);
         xhr.onload = days_load;
         xhr.onerror = handleError;
         xhr.send();
@@ -375,4 +375,9 @@ function init(i) {
         }
     }
     
+}
+
+function stop_open(e){
+    console.log(e);
+    e.stopPropagation();
 }
