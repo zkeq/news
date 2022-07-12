@@ -48,7 +48,7 @@ function first_xhr () {
     const now_time = new Date().getHours() +"hrs" + new Date().getMinutes() + "min";
     try{
         const xhr_zhihu = new XMLHttpRequest();
-        xhr_zhihu.open('GET', '/api?origin=zhihu&_vercel_no_cache=1' + '&cache=' + now_time);
+        xhr_zhihu.open('GET', 'https://news-git-dev-zkeq.vercel.app/api?origin=zhihu&_vercel_no_cache=1' + '&cache=' + now_time);
         xhr_zhihu.onload = zhihu_first_load;
         xhr_zhihu.onerror = handleError_zhihu;
         xhr_zhihu.send();
@@ -57,7 +57,7 @@ function first_xhr () {
     }
     try{
         const xhr_163 = new XMLHttpRequest();
-        xhr_163.open('GET', '/api?origin=163&_vercel_no_cache=1'+ '&cache=' + now_time);
+        xhr_163.open('GET', 'https://news-git-dev-zkeq.vercel.app/api?origin=163&_vercel_no_cache=1'+ '&cache=' + now_time);
         xhr_163.onload = _163_init_load;
         xhr_163.onerror = handleError_163;
         xhr_163.send();
@@ -133,20 +133,27 @@ function get_now_str () {
 
 function curl_news_sourece(i, data){
     // 将data分词
-    const words = Array.from(new Intl.Segmenter('cn', { granularity: 'word' }).segment(data))
+    // 检测是否有 Segmenter 对象，如果没有则加载 Intl.js
     let news_source = "";
-    // console.log(words);
-    // 获取新闻的最短词数
-    const min_word_num = Math.min(24, words.length);
-    for (let i = 0; i < min_word_num; i++) {
-        const word = words[i];
-        if (word['isWordLike'] !== false) {
-            news_source += "" + word['segment'];
+    if (typeof Intl.Segmenter === 'undefined') {
+        // Notiflix.Notify.failure('请使用 chrome内核>100 浏览器访问本网站');
+        // 取前20个字符
+        news_source = data.slice(0, 20);
+    }else{
+        const words = Array.from(new Intl.Segmenter('cn', { granularity: 'word' }).segment(data))
+        // console.log(words);
+        // 获取新闻的最短词数
+        const min_word_num = Math.min(24, words.length);
+        for (let i = 0; i < min_word_num; i++) {
+            const word = words[i];
+            if (word['isWordLike'] !== false) {
+                news_source += "" + word['segment'];
+            }
         }
     }
-    // 请求 /api/news?news_str=%E6%B2%B3%E5%8D%97%20%E5%AF%B9%20%E7%A6%B9%20%E5%B7%9E%20%E6%96%B0%20%E6%B0%91%E7%94%9F%20%E6%9D%91%E9%95%87%20%E9%93%B6%E8%A1%8C&_vercel_no_cache=1
+    // 请求 https://news-git-dev-zkeq.vercel.app/api/news?news_str=%E6%B2%B3%E5%8D%97%20%E5%AF%B9%20%E7%A6%B9%20%E5%B7%9E%20%E6%96%B0%20%E6%B0%91%E7%94%9F%20%E6%9D%91%E9%95%87%20%E9%93%B6%E8%A1%8C&_vercel_no_cache=1
     const xhr = new XMLHttpRequest();
-    xhr.open('GET', '/api?news_str=' + news_source);
+    xhr.open('GET', 'https://news-git-dev-zkeq.vercel.app/api?news_str=' + news_source);
     xhr.onload = function () {
         // console.log(i)
         if (this.status === 200) {
@@ -298,7 +305,7 @@ function get_day_news(index, origin){
         }else{
             cache =  localStorage.getItem('163_cache');
         }
-        xhr.open('GET', `/api?index=${index}&cache=${cache}&origin=${origin}`);
+        xhr.open('GET', `https://news-git-dev-zkeq.vercel.app/api?index=${index}&cache=${cache}&origin=${origin}`);
         xhr.onload = days_load;
         xhr.onerror = handleError;
         xhr.send();
