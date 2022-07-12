@@ -177,14 +177,16 @@ function curl_news_sourece(i, data){
             // id 为 news 的第 i 个 ol 元素内插入 一个 ul标签
             document.getElementById('news').children[i].innerHTML += `<ul class='hide'>${ul_data.join('')}</ul>`;
             init(i);
-            Notiflix.Notify.success(`${news_source.slice(0,6)} 原文地址加载完成`);
+            NProgress.set(i / document.getElementById('news').children.length);
         }else{
             ul_data = [`<li><a href="https://quark.sm.cn/s?q=${news_source}" target="_blank">${news_source} <p class='right'>点击进入搜索页面</p></a> </li>`];
             document.getElementById('news').children[i].innerHTML += `<ul class='hide'>${ul_data.join('')}</ul>`;
+            NProgress.set(i / document.getElementById('news').children.length);
         }}
     xhr.onerror = function () {
         ul_data = [`<li><a href="https://quark.sm.cn/s?q=${news_source}" target="_blank">${news_source} <p class='right'>点击进入搜索页面</p></a> </li>`];
         document.getElementById('news').children[i].innerHTML += `<ul class='hide'>${ul_data.join('')}</ul>`;
+        NProgress.set(i / document.getElementById('news').children.length);
     };
     xhr.send();
 }
