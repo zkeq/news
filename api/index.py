@@ -2,6 +2,7 @@
 import uvicorn
 from fastapi import FastAPI, Response
 from api.crawler import main as new
+from api.news_source import main as news_source
 
 app = FastAPI()
 
