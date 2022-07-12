@@ -131,6 +131,51 @@ function get_now_str () {
     }
 }
 
+function curl_news_sourece(i, data){
+    // 将data分词
+    const words = Array.from(new Intl.Segmenter('cn', { granularity: 'word' }).segment(data))
+    let news_source = "";
+    // console.log(words);
+    // 获取新闻的最短词数
+    const min_word_num = Math.min(14, words.length);
+    for (let i = 0; i < min_word_num; i++) {
+        const word = words[i];
+        if (word['isWordLike'] !== false) {
+            news_source += "" + word['segment'];
+        }
+    }
+    // 请求 /news_source?news_str=%E6%B2%B3%E5%8D%97%20%E5%AF%B9%20%E7%A6%B9%20%E5%B7%9E%20%E6%96%B0%20%E6%B0%91%E7%94%9F%20%E6%9D%91%E9%95%87%20%E9%93%B6%E8%A1%8C&_vercel_no_cache=1
+    const xhr = new XMLHttpRequest();
+    xhr.open('GET', '/news_source?news_str=' + news_source);
+    xhr.onload = function () {
+        // console.log(i)
+        if (this.status === 200) {
+            const data = JSON.parse(this.responseText);
+            // console.log(data);
+            let ul_data = data['data'];
+            if (ul_data.length === 0) {
+                ul_data = [`<li><a href="https://quark.sm.cn/s?q=${news_source}" target="_blank">${news_source} <p class='right'>点击进入搜索页面</p></a> </li>`];
+            }else{
+                // 将里面的 href 和 title 封装成一个 ul
+                ul_data = ul_data.map(function (item) {
+                    return `<li><a href="${item['href']}" target="_blank">${item['title']} <p class='right'>${item['origin']} ${item['time']}</p></a> </li>`;
+                });
+
+            }
+            // id 为 news 的第 i 个 ol 元素内插入 一个 ul标签
+            document.getElementById('news').children[i].innerHTML += `<ul class='hide'>${ul_data.join('')}</ul>`;
+            init(i);
+            Notiflix.Notify.success(`${news_source.slice(0,6)} 原文地址加载完成`);
+        }else{
+            ul_data = [`<li><a href="https://quark.sm.cn/s?q=${news_source}" target="_blank">${news_source} <p class='right'>点击进入搜索页面</p></a> </li>`];
+            document.getElementById('news').children[i].innerHTML += `<ul class='hide'>${ul_data.join('')}</ul>`;
+        }}
+    xhr.onerror = function () {
+        ul_data = [`<li><a href="https://quark.sm.cn/s?q=${news_source}" target="_blank">${news_source} <p class='right'>点击进入搜索页面</p></a> </li>`];
+        document.getElementById('news').children[i].innerHTML += `<ul class='hide'>${ul_data.join('')}</ul>`;
+    };
+    xhr.send();
+}
 
 function days_load (show_only) { 
     try{
@@ -172,7 +217,13 @@ function days_load (show_only) {
         for (let i = 0; i < data['news'].length; i++) {
             // 将其变成 li 并插入ol
             const li = document.createElement('li');
-            li.innerHTML = data['news'][i];
+            // 给li添加item类
+            li.className = 'item';
+            // li.innerHTML = data['news'][i];
+            li.innerHTML = `<a href="javascript:void(0);">${data['news'][i]}</a>`
+            setTimeout(() => {
+                curl_news_sourece(i, data['news'][i]);
+            },0);
             // 插入新的 li
             document.getElementById('news').appendChild(li);
         }
@@ -308,4 +359,20 @@ function change_origin  (){
         }, 1000);
     }
     get_day_news(index, origin);
+}
+
+function init(i) {
+    let d = document.getElementsByClassName("item"); // 获取所有li元素
+    d[i].index = i; // 为第i个li元素添加一个index属性，赋值为i
+    // 为li标签里面的a标签添加点击事件
+    d[i].onclick = function(){
+        // 获取当前点击的li元素的index属性值
+        index = this.index;
+        if (document.getElementsByClassName("item")[index].getElementsByTagName("ul")[0].style.display === "block") {
+            document.getElementsByClassName("item")[index].getElementsByTagName("ul")[0].style.display = "none";
+        }else{
+            document.getElementsByClassName("item")[index].getElementsByTagName("ul")[0].style.display = "block";
+        }
+    }
+    
 }

@@ -12,7 +12,7 @@ a:active, a:hover { outline: 0px; }
 #write.first-line-indent li { margin-left: 2em; }
 .for-image #write { padding-left: 8px; padding-right: 8px; }
 body.typora-export { padding-left: 30px; padding-right: 30px; }
-.typora-export .footnote-line, .typora-export li, .typora-export p { white-space: pre-wrap; }
+/* .typora-export .footnote-line, .typora-export li, .typora-export p { white-space: pre-wrap; } */
 .typora-export .task-list-item input { pointer-events: none; }
 @media screen and (max-width: 500px) {
   body {
@@ -36,7 +36,7 @@ input[type="checkbox"], input[type="radio"] { line-height: normal; padding: 0px;
 *, ::after, ::before { box-sizing: border-box; }
 #write h1, #write h2, #write h3, #write h4, #write h5, #write h6, #write p, #write pre { width: inherit; }
 #write h1, #write h2, #write h3, #write h4, #write h5, #write h6, #write p { position: relative; }
-p { line-height: inherit; }
+p { display:inline }
 h1, h2, h3, h4, h5, h6 { break-after: avoid-page; break-inside: avoid; orphans: 4; }
 p { orphans: 4; }
 h1 { font-size: 2rem; }
@@ -665,6 +665,15 @@ sub {
 /* 让链接在 hover 状态下显示下划线 */
 a {
   color: #1abc9c;
+  font-size: smaller;
+}
+
+p {
+  font-size: 14px;
+}
+
+.item {
+  font-size: 1.2rem !important;
 }
 
 a:hover {
@@ -1871,7 +1880,7 @@ ins {
 #write a,
 #write ins {
   text-decoration: none;
-  border-bottom: var(--base-borderb);
+  /* border-bottom: var(--base-borderb); */
 }
 
 #write a:hover,
@@ -1888,7 +1897,7 @@ ins {
 
 #write em {
   background: var(--bg-italic);
-  color: var(--color-italic);
+  /* color: var(--color-italic); */
   border-bottom: var(--opt-borderb);
 }
 
@@ -2489,9 +2498,9 @@ ul li::marker {
   font-size: 14pt;
 }
 
-ul em {
+/* ul em {
   font-family: var(--text-font-jp);
-}
+} */
 
 ul img {
   padding: 0;
@@ -2510,9 +2519,9 @@ ol {
   list-style: decimal-leading-zero;
 }
 
-ol em {
+/* ol em {
   font-family: var(--ol-font-jp);
-}
+} */
 
 ol ol {
   list-style: lower-latin;
@@ -2622,7 +2631,8 @@ em {
   background: var(--bg-link);
   color: var(--color-link);
   text-decoration: none;
-  border-bottom: var(--base-borderb);
+  display: block;
+  /* border-bottom: var(--base-borderb); */
 }
 
 #write a:hover {
@@ -2631,9 +2641,9 @@ em {
   text-decoration: none;
 }
 
-a[href^="http://"]:after {
+/* a[href^="http://"]:after {
   content: " ("attr(href) ") ";
-}
+} */
 
 strong {
   background: var(--bg-strong);
@@ -2642,9 +2652,9 @@ strong {
 
 em {
   background: var(--bg-italic);
-  color: var(--color-italic);
+  /* color: var(--color-italic); */
   font-style: normal;
-  font-family: var(--text-font-jp);
+  /* font-family: var(--text-font-jp); */
 }
 
 strong,
@@ -2960,4 +2970,8 @@ table tr:hover {
     font-display: swap;
     font-weight: bold;
     font-style: normal;
+}
+
+.hide {
+  display: none
 }

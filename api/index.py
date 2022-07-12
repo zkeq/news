@@ -15,5 +15,13 @@ def news(response: Response, index: int = 0, origin: str = 'zhihu', cache: str =
     return new(index, origin)
 
 
+@app.get("/news_source")
+def new_source(response: Response, news_str: str, cache: str = 'null'):
+    response.headers["Cache-Control"] = "max-age=86400, immutable, stale-while-revalidate"
+    response.headers["Content-Type"] = "application/json; charset=utf-8"
+    response.headers["Access-Control-Allow-Origin"] = "*"
+    return news_source(news_str)
+
+
 if __name__ == "__main__":
     uvicorn.run("index:app", host="127.0.0.1", port=61, log_level="info")
