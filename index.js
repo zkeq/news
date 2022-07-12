@@ -97,6 +97,11 @@ function zhihu_first_load () {
     }catch(error){
         handleError_zhihu(error);
     }
+    if (localStorage.getItem('detail') === null) {
+    Notiflix.Notify.info('你知道吗？点击条目可以查看原文哦。点我确认知晓。', ()=>{
+        localStorage.setItem('detail', 'true');
+        });
+    }
 }
 
 function _163_init_load () {
