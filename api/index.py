@@ -15,7 +15,7 @@ def news(response: Response, index: int = 0, origin: str = 'zhihu', cache: str =
     return new(index, origin)
 
 
-@app.get("/news_source")
+@app.get("/api/news_source")
 def new_source(response: Response, news_str: str, cache: str = 'null'):
     response.headers["Cache-Control"] = "max-age=86400, immutable, stale-while-revalidate"
     response.headers["Content-Type"] = "application/json; charset=utf-8"

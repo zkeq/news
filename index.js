@@ -144,9 +144,9 @@ function curl_news_sourece(i, data){
             news_source += "" + word['segment'];
         }
     }
-    // 请求 /news_source?news_str=%E6%B2%B3%E5%8D%97%20%E5%AF%B9%20%E7%A6%B9%20%E5%B7%9E%20%E6%96%B0%20%E6%B0%91%E7%94%9F%20%E6%9D%91%E9%95%87%20%E9%93%B6%E8%A1%8C&_vercel_no_cache=1
+    // 请求 /api/news_source?news_str=%E6%B2%B3%E5%8D%97%20%E5%AF%B9%20%E7%A6%B9%20%E5%B7%9E%20%E6%96%B0%20%E6%B0%91%E7%94%9F%20%E6%9D%91%E9%95%87%20%E9%93%B6%E8%A1%8C&_vercel_no_cache=1
     const xhr = new XMLHttpRequest();
-    xhr.open('GET', '/news_source?news_str=' + news_source);
+    xhr.open('GET', '/api/news_source?news_str=' + news_source);
     xhr.onload = function () {
         // console.log(i)
         if (this.status === 200) {
