@@ -8,7 +8,7 @@
 
 - 感觉很不错，就想着能不能自己做一个
 
-- 详细经过见博文：[归档 | 前后端都基于 vercel 的每日早报项目](https://github.com/zkeq/Coding/blob/main/source/_posts/%E5%BD%92%E6%A1%A3-%E5%89%8D%E5%90%8E%E7%AB%AF%E9%83%BD%E4%BE%9D%E6%89%98%E4%BA%8E-vercel-%E7%9A%84%E6%AF%8F%E6%97%A5%E6%97%A9%E6%8A%A5%E9%A1%B9%E7%9B%AE.md)
+- 详细经过见博文：[归档 | 前后端都基于 vercel 的每日早报项目](https://icodeq.com/2022/5fe2010403bb/)
 
 #### 官网
 
