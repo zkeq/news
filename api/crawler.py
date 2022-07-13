@@ -8,7 +8,7 @@ def get_zhihu_days(index):
     headers = {
         "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/103.0.5060.66 Safari/537.36 Edg/103.0.1264.44"
     }
-    base_url = f"https://www.zhihu.com/api/v4/columns/c_1261258401923026944/items?limit=1&offset={index}"
+    base_url = f"https://www.zhihu.com/api/v4/columns/c_1261258401923026944/items?limit=2&offset={index}"
     data = requests.get(base_url, headers=headers).json()
     html = data['data'][0]['content']
     soup = BeautifulSoup(html, 'lxml')
