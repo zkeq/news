@@ -1,7 +1,7 @@
 # coding:utf-8
 import uvicorn
 from fastapi import FastAPI, Response
-from crawler import main as new
+from api.crawler import main as new
 
 app = FastAPI()
 
