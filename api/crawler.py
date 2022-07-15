@@ -62,7 +62,7 @@ def main(index, origin):
         except Exception as e:
             data = [str(e)]*18
             suc = False
-            news_list = []
+            news_list = 'zhihu'
     else:
         try:
             data, news_list = get_163_days(index)
@@ -70,7 +70,7 @@ def main(index, origin):
         except Exception as e:
             data = [str(e)]*18
             suc = False
-            news_list = []
+            news_list = '163'
     return {
         'suc': suc,
         'time': time.strftime("%Y-%m-%d %H:%M:%S", time.localtime()),
