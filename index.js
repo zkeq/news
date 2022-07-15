@@ -1,5 +1,7 @@
 let index = 0;
 let origin = 'zhihu';
+// 方向
+let direction = 'before';
 let show_only = false;
 get_day_news(0, origin);
 show_only = true;
