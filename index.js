@@ -358,6 +358,7 @@ function after (){
         Notiflix.Notify.success('当前已经是最新的了');
     }else{
         index -= 1;
+        direction = 'before';
         get_day_news(index, origin);
         bing_load(index);
     }
@@ -368,6 +369,7 @@ function before (){
         Notiflix.Notify.warning('之后没有了');
     }else{
         index += 1;
+        direction = 'after';
         get_day_news(index, origin);
         bing_load(index);
     }
