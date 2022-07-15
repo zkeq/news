@@ -15,7 +15,7 @@ function report_bug () {
 function handleError (e) { 
     // 如果返回的是知乎的错误，则提示知乎源的错误
     if (origin === 'zhihu') {
-        if (e.response.data.news === 'zhihu') {
+        if (e.data.news === 'zhihu') {
             Notiflix.Notify.error(`当天新闻不存在，尝试获取前一天 \uD83D\uDE1E ${e}`);
             get_day_news(index = (index + 1), origin);
         } else {
