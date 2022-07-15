@@ -63,6 +63,7 @@ def main(index, origin):
             data = [str(e)]*18
             suc = False
             news_list = 'zhihu'
+            print('i am here.')
     else:
         try:
             data, news_list = get_163_days(index)
@@ -71,6 +72,7 @@ def main(index, origin):
             data = [str(e)]*18
             suc = False
             news_list = '163'
+    print('news_list:', news_list)
     return {
         'suc': suc,
         'time': time.strftime("%Y-%m-%d %H:%M:%S", time.localtime()),
