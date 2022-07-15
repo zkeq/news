@@ -13,13 +13,37 @@ function report_bug () {
 }
 
 function handleError (e) { 
-    NProgress.done();
-    Notiflix.Notify.failure(`An error occurred \uD83D\uDE1E ${e}`, ()=>report_bug());
+    // 如果返回的是知乎的错误，则提示知乎源的错误
+    if (origin === 'zhihu') {
+        console.log(e);
+        if (e.data.news === 'zhihu') {
+            if (direction === 'before') {
+                get_day_news(index = (index - 1), origin);
+                Notiflix.Notify.failure(`当天新闻不存在，尝试获取前一天 \uD83D\uDE1E ${e.data.title}`);
+            } else {
+                Notiflix.Notify.failure(`当天新闻不存在，尝试获取后一天 \uD83D\uDE1E ${e.data.title}`);
+                get_day_news(index = (index + 1), origin);
+            }
+        } else {
+            NProgress.done();
+            Notiflix.Notify.failure(`An error occurred \uD83D\uDE1E ${e['data']['title']}`, ()=>report_bug());
+        }
+    }
+    else {
+        NProgress.done();
+        Notiflix.Notify.failure(`An error occurred \uD83D\uDE1E ${e['data']['title']}`, ()=>report_bug());
+    }
 }
 
 function handleError_zhihu (e) { 
     NProgress.done();
-    Notiflix.Notify.failure(`知乎源：An error occurred \uD83D\uDE1E ${e}`, ()=>report_bug());
+    if (direction === 'before') {
+        get_day_news(index = (index - 1), origin);
+        Notiflix.Notify.failure(`当天新闻不存在，尝试获取前一天 \uD83D\uDE1E ${e}`);
+    } else {
+        Notiflix.Notify.failure(`当天新闻不存在，尝试获取后一天 \uD83D\uDE1E ${e}`);
+        get_day_news(index = (index + 1), origin);
+    }
 }
 
 function handleError_163 (e) { 
