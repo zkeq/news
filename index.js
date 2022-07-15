@@ -192,7 +192,7 @@ function days_load (show_only) {
         // // 滚动条滚到顶部
         // window.scrollTo(0, 0);
     } else {
-        handleError(days['data']['title']);
+        handleError(days);
     }}
     catch(error){
         handleError(error);
