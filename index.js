@@ -197,7 +197,7 @@ function curl_news_sourece(i, data){
             // console.log(data);
             let ul_data = data['data'];
             if (ul_data.length === 0) {
-                ul_data = [`<li><a href="https://quark.sm.cn/s?q=${news_source}" target="_blank">${news_source} <p class='right'>点击进入搜索页面</p></a> </li>`];
+                ul_data = [`<li onclick="stop_open(event)"><a href="https://quark.sm.cn/s?q=${news_source}" target="_blank">${news_source} <p class='right'>点击进入搜索页面</p></a> </li>`];
             }else{
                 // 将里面的 href 和 title 封装成一个 ul
                 ul_data = ul_data.map(function (item) {
