@@ -19,7 +19,8 @@ function handleError (e) {
 
 function handleError_zhihu (e) { 
     NProgress.done();
-    Notiflix.Notify.failure(`知乎源：An error occurred \uD83D\uDE1E ${e}`, ()=>report_bug());
+    Notiflix.Notify.failure(`知乎源：当天新闻不存在，尝试获取前一天 \uD83D\uDE1E ${e}`);
+    get_day_news(index = (index + 1), origin);
 }
 
 function handleError_163 (e) { 
