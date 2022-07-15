@@ -1,5 +1,7 @@
 let index = 0;
 let origin = 'zhihu';
+// 方向
+let direction = 'before';
 let show_only = false;
 get_day_news(0, origin);
 show_only = true;
@@ -15,9 +17,15 @@ function report_bug () {
 function handleError (e) { 
     // 如果返回的是知乎的错误，则提示知乎源的错误
     if (origin === 'zhihu') {
+        console.log(e);
         if (e.data.news === 'zhihu') {
-            Notiflix.Notify.error(`当天新闻不存在，尝试获取前一天 \uD83D\uDE1E ${e}`);
-            get_day_news(index = (index + 1), origin);
+            if (direction === 'before') {
+                get_day_news(index = (index - 1), origin);
+                Notiflix.Notify.failure(`当天新闻不存在，尝试获取前一天 \uD83D\uDE1E ${e.data.title}`);
+            } else {
+                Notiflix.Notify.failure(`当天新闻不存在，尝试获取后一天 \uD83D\uDE1E ${e.data.title}`);
+                get_day_news(index = (index + 1), origin);
+            }
         } else {
             NProgress.done();
             Notiflix.Notify.failure(`An error occurred \uD83D\uDE1E ${e['data']['title']}`, ()=>report_bug());
@@ -31,8 +39,13 @@ function handleError (e) {
 
 function handleError_zhihu (e) { 
     NProgress.done();
-    Notiflix.Notify.error(`当天新闻不存在，尝试获取前一天 \uD83D\uDE1E ${e}`);
-    get_day_news(index = (index + 1), origin);
+    if (direction === 'before') {
+        get_day_news(index = (index - 1), origin);
+        Notiflix.Notify.failure(`当天新闻不存在，尝试获取前一天 \uD83D\uDE1E ${e}`);
+    } else {
+        Notiflix.Notify.failure(`当天新闻不存在，尝试获取后一天 \uD83D\uDE1E ${e}`);
+        get_day_news(index = (index + 1), origin);
+    }
 }
 
 function handleError_163 (e) { 
@@ -61,7 +74,7 @@ function first_xhr () {
     const now_time = new Date().getHours() +"hrs" + new Date().getMinutes() + "min";
     try{
         const xhr_zhihu = new XMLHttpRequest();
-        xhr_zhihu.open('GET', '/api?origin=zhihu&_vercel_no_cache=1' + '&cache=' + now_time);
+        xhr_zhihu.open('GET', 'http://127.0.0.1:62/api?origin=zhihu&_vercel_no_cache=1' + '&cache=' + now_time);
         xhr_zhihu.onload = zhihu_first_load;
         xhr_zhihu.onerror = handleError_zhihu;
         xhr_zhihu.send();
@@ -70,7 +83,7 @@ function first_xhr () {
     }
     try{
         const xhr_163 = new XMLHttpRequest();
-        xhr_163.open('GET', '/api?origin=163&_vercel_no_cache=1'+ '&cache=' + now_time);
+        xhr_163.open('GET', 'http://127.0.0.1:62/api?origin=163&_vercel_no_cache=1'+ '&cache=' + now_time);
         xhr_163.onload = _163_init_load;
         xhr_163.onerror = handleError_163;
         xhr_163.send();
@@ -260,7 +273,7 @@ function get_day_news(index, origin){
         }else{
             cache =  localStorage.getItem('163_cache');
         }
-        xhr.open('GET', `/api?index=${index}&cache=${cache}&origin=${origin}`);
+        xhr.open('GET', `http://127.0.0.1:62/api?index=${index}&cache=${cache}&origin=${origin}`);
         xhr.onload = days_load;
         xhr.onerror = handleError;
         xhr.send();
@@ -274,6 +287,7 @@ function after (){
         Notiflix.Notify.success('当前已经是最新的了');
     }else{
         index -= 1;
+        direction = 'before';
         get_day_news(index, origin);
         bing_load(index);
     }
@@ -284,6 +298,7 @@ function before (){
         Notiflix.Notify.warning('之后没有了');
     }else{
         index += 1;
+        direction = 'after';
         get_day_news(index, origin);
         bing_load(index);
     }
