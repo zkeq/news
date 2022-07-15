@@ -22,6 +22,11 @@ function handleError (e) {
             NProgress.done();
             Notiflix.Notify.failure(`An error occurred \uD83D\uDE1E ${e}`, ()=>report_bug());
         }
+    }
+    else {
+        NProgress.done();
+        Notiflix.Notify.failure(`An error occurred \uD83D\uDE1E ${e}`, ()=>report_bug());
+    }
 }
 
 function handleError_zhihu (e) { 
