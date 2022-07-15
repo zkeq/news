@@ -25,8 +25,8 @@ function handleError (e) {
                 Notiflix.Notify.failure(`当天新闻不存在，尝试获取前一天 \uD83D\uDE1E ${e.data.title}`);
             } else {
                 Notiflix.Notify.failure(`当天新闻不存在，尝试获取后一天 \uD83D\uDE1E ${e.data.title}`);
-                bing_load(index);
                 get_day_news(index = (index + 1), origin);
+                bing_load(index);
             }
         } else {
             NProgress.done();
@@ -47,8 +47,8 @@ function handleError_zhihu (e) {
         Notiflix.Notify.failure(`当天新闻不存在，尝试获取前一天 \uD83D\uDE1E ${e}`);
     } else {
         Notiflix.Notify.failure(`当天新闻不存在，尝试获取后一天 \uD83D\uDE1E ${e}`);
-        bing_load(index);
         get_day_news(index = (index + 1), origin);
+        bing_load(index);
     }
 }
 
