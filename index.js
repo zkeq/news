@@ -20,6 +20,10 @@ function handleError (e) {
         console.log(e);
         if (e.data.news === 'zhihu') {
             if (direction === 'before') {
+                if (index < 0) {
+                    direction = 'after';
+                    index = 0;
+                }
                 get_day_news(index = (index - 1), origin);
                 bing_load(index);
                 Notiflix.Notify.failure(`当天新闻不存在，尝试获取前一天 \uD83D\uDE1E ${e.data.title}`);
