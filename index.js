@@ -43,8 +43,9 @@ function handleError (e) {
 function handleError_zhihu (e) { 
     NProgress.done();
     if (direction === 'before') {
-        if (index === 0) {
+        if (index === -1) {
             direction = 'after';
+            index = 0;
         }
         get_day_news(index = (index - 1), origin);
         bing_load(index);
