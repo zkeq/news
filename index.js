@@ -20,7 +20,7 @@ function handleError (e) {
         console.log(e);
         if (e.data.news === 'zhihu') {
             if (direction === 'before') {
-                if (index === -1) {
+                if (index < 0) {
                     direction = 'after';
                     index = 0;
                 }
