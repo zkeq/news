@@ -101,7 +101,12 @@ function first_xhr () {
 }
 
 function str_to_date(str) {
-    const date_str = str.split(' ')[0];
+    let date_str;
+    try{
+        date_str = str.split(' ')[0];
+    }catch(error){
+        return str;
+    }
     try{
         const year = date_str.split('年')[0];
         const month = date_str.split('年')[1].split('月')[0];
