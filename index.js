@@ -101,25 +101,22 @@ function first_xhr () {
 }
 
 function str_to_date(str) {
-    let date_str;
-    try{
-        date_str = str.split(' ')[0];
-    }catch(error){
-        return str;
+    const dateRegex = /(\d{4})年?(\d{1,2})月(\d{1,2})日?/;
+    const matches = str.match(dateRegex);
+    if (matches) {
+      return `${matches[1]}-${matches[2]}-${matches[3]}`;
+    }else{
+       // 如果没有年份，则默认为今年
+        const year = new Date().getFullYear();
+        const matches = str.match(/(\d{1,2})月(\d{1,2})日?/);
+        if (matches) {
+            return `${year}-${matches[1]}-${matches[2]}`;
+        }
     }
-    try{
-        const year = date_str.split('年')[0];
-        const month = date_str.split('年')[1].split('月')[0];
-        const day = date_str.split('月')[1].split('日')[0];
-        const cache = `${year}-${month}-${day}`; 
-        return cache; 
-    }catch(error){
-        const month = date_str.split('月')[0];
-        const day = date_str.split('月')[1].split('日')[0];
-        const cache = `${month}-${day}`;  
-        return cache;     
-    }
-}
+    return str;
+  }
+
+// 本函数由 chatGPT 修复
 
 
 function zhihu_first_load () {
