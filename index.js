@@ -82,7 +82,7 @@ function first_xhr () {
     const now_time = new Date().getHours() +"hrs" + new Date().getMinutes() + "min";
     try{
         const xhr_zhihu = new XMLHttpRequest();
-        xhr_zhihu.open('GET', '/api?origin=zhihu&_vercel_no_cache=1' + '&cache=' + now_time);
+        xhr_zhihu.open('GET', 'https://news.icodeq.com/api?origin=zhihu&_vercel_no_cache=1' + '&cache=' + now_time);
         xhr_zhihu.onload = zhihu_first_load;
         xhr_zhihu.onerror = handleError_zhihu;
         xhr_zhihu.send();
@@ -91,7 +91,7 @@ function first_xhr () {
     }
     try{
         const xhr_163 = new XMLHttpRequest();
-        xhr_163.open('GET', '/api?origin=163&_vercel_no_cache=1'+ '&cache=' + now_time);
+        xhr_163.open('GET', 'https://news.icodeq.com/api?origin=163&_vercel_no_cache=1'+ '&cache=' + now_time);
         xhr_163.onload = _163_init_load;
         xhr_163.onerror = handleError_163;
         xhr_163.send();
@@ -101,25 +101,22 @@ function first_xhr () {
 }
 
 function str_to_date(str) {
-    let date_str;
-    try{
-        date_str = str.split(' ')[0];
-    }catch(error){
-        return str;
+    const dateRegex = /(\d{4})年?(\d{1,2})月(\d{1,2})日?/;
+    const matches = str.match(dateRegex);
+    if (matches) {
+      return `${matches[1]}-${matches[2]}-${matches[3]}`;
+    }else{
+       // 如果没有年份，则默认为今年
+        const year = new Date().getFullYear();
+        const matches = str.match(/(\d{1,2})月(\d{1,2})日?/);
+        if (matches) {
+            return `${year}-${matches[1]}-${matches[2]}`;
+        }
     }
-    try{
-        const year = date_str.split('年')[0];
-        const month = date_str.split('年')[1].split('月')[0];
-        const day = date_str.split('月')[1].split('日')[0];
-        const cache = `${year}-${month}-${day}`; 
-        return cache; 
-    }catch(error){
-        const month = date_str.split('月')[0];
-        const day = date_str.split('月')[1].split('日')[0];
-        const cache = `${month}-${day}`;  
-        return cache;     
-    }
-}
+    return str;
+  }
+
+// 本函数由 chatGPT 修复
 
 
 function zhihu_first_load () {
@@ -286,7 +283,7 @@ function get_day_news(index, origin){
         }else{
             cache =  localStorage.getItem('163_cache');
         }
-        xhr.open('GET', `/api?index=${index}&cache=${cache}&origin=${origin}`);
+        xhr.open('GET', `https://news.icodeq.com/api?index=${index}&cache=${cache}&origin=${origin}`);
         xhr.onload = days_load;
         xhr.onerror = handleError;
         xhr.send();
