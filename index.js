@@ -46,12 +46,12 @@ function handleError (e) {
 function handleError_zhihu (e) { 
     NProgress.done();
     if (direction === 'before') {
-        get_day_news(index = (index - 1), origin);
+        get_day_news(index, origin);
         bing_load(index);
         Notiflix.Notify.failure(`当天新闻不存在，尝试获取前一天 \uD83D\uDE1E ${e}`);
     } else {
         Notiflix.Notify.failure(`当天新闻不存在，尝试获取后一天 \uD83D\uDE1E ${e}`);
-        get_day_news(index = (index + 1), origin);
+        get_day_news(index, origin);
         bing_load(index);
     }
 }
