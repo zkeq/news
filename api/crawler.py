@@ -45,6 +45,8 @@ def get_163_days(index):
     final_list = []
     news_list = []
     for i in list_all:
+        if "↑" in i:
+            continue
         if "<" not in i and ">" not in i and i != '':
             i.replace('\u200b', '')
             if '、' in i and "微语" not in i:
