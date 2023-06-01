@@ -49,9 +49,11 @@ def get_163_days(index):
             continue
         if "<" not in i and ">" not in i and i != '':
             i.replace('\u200b', '')
-            if '、' in i and "微语" not in i:
+            if '、' or "." in i and "微语" not in i:
                 new_str = '、'.join(i.split('、')[1:])
-                news_list.append(new_str)
+                new_str = '.'.join(i.split('.')[1:])
+                if new_str:
+                    news_list.append(new_str)
             final_list.append(i)
     return final_list, news_list
 
