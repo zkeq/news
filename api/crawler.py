@@ -1,88 +1,99 @@
-# coding: utf-8
-from bs4 import BeautifulSoup
+import re
+from urllib.parse import urljoin, urlsplit
+
 import requests
-import time
+from bs4 import BeautifulSoup
 
 
-def get_zhihu_days(index):
-    headers = {
-        "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/103.0.5060.66 Safari/537.36 Edg/103.0.1264.44"
-    }
-    base_url = f"https://www.zhihu.com/api/v4/columns/c_1261258401923026944/items?limit=1&offset={index}"
-    data = requests.get(base_url, headers=headers).json()
-    html = data['data'][0]['content']
-    soup = BeautifulSoup(html, 'lxml')
-    day_news = soup.find_all('p')
-    final_list = []
-    news_list = []
-    for i in day_news:
-        i = i.text
-        if i != '':
-            final_list.append(i)
-            if '、' in i:
-                new_str = '、'.join(i.split('、')[1:])
-                news_list.append(new_str)
-    final_list[0], final_list[1] = final_list[1], final_list[0]
-    return final_list, news_list
+ARCHIVE_URLS = (
+    "https://raw.githubusercontent.com/vikiboss/60s-static-host/main/static/60s/",
+    "https://cdn.jsdmirror.com/gh/vikiboss/60s-static-host@main/static/60s/",
+)
+NETEASE_LIST = "https://www.163.com/dy/media/T1603594732083.html"
+TIMEOUT = (3, 5)
+NUMBERED_LINE = re.compile(r"^\d+\s*[、.．]\s*(.+)$")
+DATE_LINE = re.compile(r"^(\d{4})年\s*(\d{1,2})月\s*(\d{1,2})日")
+MONTH_DAY = re.compile(r"(\d{1,2})月\s*(\d{1,2})日")
+TIP_PREFIX = "【微语】"
 
 
-def get_163_days(index):
-    list_url = 'https://www.163.com/dy/media/T1603594732083.html'
-    headers = {
-        "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/103.0.5060.66 Safari/537.36 Edg/103.0.1264.44",
-        "realIP": "218.109.147.57"
-    }
+class NewsNotFound(Exception):
+    pass
 
-    data = requests.get(list_url, headers=headers)
-    print(data.url)
-    soup = BeautifulSoup(data.text, 'lxml')
-    days_list = soup.find_all('a', attrs={"class": "title"})
-    new_url = days_list[index]['href']
-    new_data = requests.get(new_url, headers=headers)
-    soup = BeautifulSoup(new_data.text, 'lxml')
-    day_news = soup.find('div', attrs={"class": "post_body"})
-    list_all = str(day_news).split('<br/>')
-    final_list = []
-    news_list = []
-    for i in list_all:
-        if "↑" in i:
+
+class SourceUnavailable(Exception):
+    pass
+
+
+def get_60s_day(day):
+    for base_url in ARCHIVE_URLS:
+        try:
+            result = requests.get(f"{base_url}{day.isoformat()}.json", timeout=TIMEOUT)
+            if result.status_code == 404:
+                raise NewsNotFound
+            result.raise_for_status()
+            payload = result.json()
+        except (requests.RequestException, ValueError):
             continue
-        if "<" not in i and ">" not in i and i != '':
-            i.replace('\u200b', '')
-            if '、' or "." in i and "微语" not in i:
-                new_str = '、'.join(i.split('、')[1:])
-                new_str = '.'.join(i.split('.')[1:])
-                if new_str:
-                    news_list.append(new_str)
-            final_list.append(i)
-    return final_list, news_list
+
+        if not isinstance(payload, dict) or payload.get("date") != day.isoformat():
+            continue
+
+        news = payload.get("news")
+        if not isinstance(news, list) or not news or not all(
+            isinstance(line, str) and line.strip() for line in news
+        ):
+            continue
+
+        tip = payload.get("tip")
+        date_label = f"{day.year}年{day.month}月{day.day}日 星期{'一二三四五六日'[day.weekday()]}"
+        return "每天 60 秒读懂世界", date_label, news, tip.strip() if isinstance(tip, str) else ""
+
+    raise SourceUnavailable
 
 
-def main(index, origin):
-    if origin == 'zhihu':
-        try:
-            data, news_list = get_zhihu_days(index)
-            suc = True
-        except Exception as e:
-            data = [str(e)]*18
-            suc = False
-            news_list = 'zhihu'
-    else:
-        try:
-            data, news_list = get_163_days(index)
-            suc = True
-        except Exception as e:
-            data = [str(e)]*18
-            suc = False
-            news_list = '163'
-    return {
-        'suc': suc,
-        'time': time.strftime("%Y-%m-%d %H:%M:%S", time.localtime()),
-        'data': {
-            'title': data[0],
-            'date': data[1],
-            'news': news_list,
-            'weiyu': data[-1]
-        },
-        'all_data': data
-    }
+def get_netease_page(url):
+    result = requests.get(url, headers={"User-Agent": "Mozilla/5.0"}, timeout=TIMEOUT)
+    result.raise_for_status()
+    return BeautifulSoup(result.content, "html.parser", from_encoding="utf-8")
+
+
+def get_163_day(day):
+    links = get_netease_page(NETEASE_LIST).select("a.title[href]")
+    dated_links = [(MONTH_DAY.search(link.get_text()), link["href"]) for link in links]
+    if not any(match for match, _ in dated_links):
+        raise SourceUnavailable
+
+    for match, href in dated_links:
+        if match is None or tuple(map(int, match.groups())) != (day.month, day.day):
+            continue
+
+        url = urljoin(NETEASE_LIST, href)
+        parsed_url = urlsplit(url)
+        if parsed_url.scheme == "https" and parsed_url.hostname == "www.163.com":
+            article = get_netease_page(url)
+            title = article.find("h1")
+            body = article.select_one(".post_body")
+            if not title or not body:
+                raise SourceUnavailable
+
+            for line_break in body.find_all("br"):
+                line_break.replace_with("\n")
+            for paragraph in body.find_all("p"):
+                paragraph.append("\n")
+
+            lines = [line.replace("\u200b", "").strip() for line in body.get_text().splitlines()]
+            date_label = next((line for line in lines if DATE_LINE.match(line)), "")
+            date_match = DATE_LINE.match(date_label)
+            if not date_match:
+                raise SourceUnavailable
+            if tuple(map(int, date_match.groups())) != (day.year, day.month, day.day):
+                continue
+
+            news = [match[1].strip() for line in lines if (match := NUMBERED_LINE.match(line))]
+            if not news:
+                raise SourceUnavailable
+            tip = next((line for line in lines if line.startswith(TIP_PREFIX)), "")
+            return title.get_text(strip=True), date_label, news, tip
+
+    raise NewsNotFound

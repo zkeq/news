@@ -2919,7 +2919,7 @@ table tr:hover {
   width: 100%;
 }
 
-.button:hover:before {
+.button:enabled:hover:before {
   animation: opacityFallbackIn 0s step-start forwards;
   clip-path: polygon(0 0, 101% 0, 101% 101%, 0 101%);
 }
@@ -2931,6 +2931,16 @@ table tr:hover {
 .button span {
   z-index: 1;
   position: relative;
+}
+
+.button:disabled {
+  cursor: default;
+  opacity: .5;
+}
+
+.button:focus-visible {
+  outline: 2px solid currentColor;
+  outline-offset: -2px;
 }
 
 #weiyu {

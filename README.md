@@ -36,13 +36,18 @@
 
 - 见分支 https://github.com/zkeq/news/tree/replit
 
-#### 服务器部署（不推荐）
+#### 本地预览
 
-1. 安装 `Python 3` 
-2. 安装 [依赖库](https://github.com/zkeq/news/blob/main/api/requirements.txt)
-3. 将 `api/index.py`  中的 `from api.crawler` 改为 `from crawler`
-4. 运行 ` python api/index.py`
-5. 将 `index.js`中的 api 域名改为部署得到的域名即可
+在项目根目录运行：
+
+```sh
+python -m pip install -r requirements.txt
+python -m uvicorn api.index:app --host 127.0.0.1 --port 8000
+```
+
+打开 [浅色模式](http://127.0.0.1:8000/) 或 [深色模式](http://127.0.0.1:8000/dark/)。
+
+60 秒早报参考 [60s-php](https://github.com/lzwme/60s-php)，使用 [60s-static-host](https://github.com/vikiboss/60s-static-host) 的按日存档。
 
 #### API 说明
 
@@ -54,7 +59,9 @@ GET：`/api`
 | :--------------- | :---- | :----- | :--: | :--------------------- | :--------------------- |
 | `_vercel_no_cache` | `query` |        |  否  | `1` |说明：`vercel` 强制不缓存                            |
 | `cache`          | `query` |        |  否  | 任意值  |说明：清除缓存用                              |
-| `index`          | `query` | `number` |  否  | `0` | 说明：`0-99` 用来控制天数，`0` 为今天，`1` 为昨天，依次类推 |
-| `origin`         | `query` | `string` |  否  | `zhihu` |说明："`zhihu`" 或 "`163`" 切换源                  |
+| `index`          | `query` | `number` |  否  | `0` | 按北京时间计算，`0` 为今天，`1` 为昨天，最大为 `99` |
+| `origin`         | `query` | `string` |  否  | `60s` | `60s` 为默认早报，`163` 为网易早报。旧参数 `zhihu` 映射到 `60s` |
+
+如果指定日期没有早报，接口返回 `suc: false` 和 `error: "not_found"`。上游暂时不可用时返回 `error: "source_unavailable"`。
 
 详细信息见：[每日早报 (apifox.cn)](https://www.apifox.cn/apidoc/shared-4c5d28ed-633e-45e0-a6d5-3c0a8933f132/api-28569354)
