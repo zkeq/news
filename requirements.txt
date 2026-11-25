@@ -1,1 +1,4 @@
--r api/requirements.txt
+requests>=2.32.4,<3
+fastapi>=0.115,<1
+uvicorn>=0.34,<1
+beautifulsoup4>=4.12,<5
